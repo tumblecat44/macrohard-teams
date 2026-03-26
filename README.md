@@ -17,20 +17,6 @@ Claude Code plugin that gives you a 4-agent build team. Tell it what to build â€
 /reload-plugins
 ```
 
-### From local directory (for development)
-
-```bash
-claude --plugin-dir ./plugins/macrohard-teams
-```
-
-### Submit to official Anthropic marketplace
-
-We plan to submit to the official marketplace at [claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit). Once approved, installation will be:
-
-```bash
-/plugin install macrohard-teams@claude-plugins-official
-```
-
 ## Use
 
 ```
