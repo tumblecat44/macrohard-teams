@@ -1,20 +1,43 @@
 # macrohard-teams
 
-Claude Code plugin that gives you a 4-agent build team. Tell it what to build, it does the rest — PM writes the PRD, engineer implements, QA tests.
+Claude Code plugin that gives you a 4-agent build team. Tell it what to build — PM writes the PRD, engineer implements, QA tests.
 
 ## Install
 
+### From marketplace (recommended)
+
 ```bash
-claude --plugin-dir ./macrohard-teams
+# 1. Add the marketplace
+/plugin marketplace add tumblecat44/macrohard-teams
+
+# 2. Install the plugin
+/plugin install macrohard-teams@macrohard-teams
+
+# 3. Activate (run once after install)
+/reload-plugins
+```
+
+### From local directory (for development)
+
+```bash
+claude --plugin-dir ./plugins/macrohard-teams
+```
+
+### Submit to official Anthropic marketplace
+
+We plan to submit to the official marketplace at [claude.ai/settings/plugins/submit](https://claude.ai/settings/plugins/submit). Once approved, installation will be:
+
+```bash
+/plugin install macrohard-teams@claude-plugins-official
 ```
 
 ## Use
 
 ```
-/macrohard-teams:build 쇼핑몰 만들어줘
+/macrohard-teams:build 유저 인증 시스템 만들어줘
 ```
 
-That's it. The leader agent:
+The leader agent:
 1. Decides if a team is needed (small tasks skip the team)
 2. Has PM write a PRD with acceptance criteria
 3. Has engineer implement based on the PRD
@@ -22,54 +45,74 @@ That's it. The leader agent:
 5. If tests fail, sends fixes back to engineer (max 3 retries)
 6. Reports what was built
 
-Check progress anytime:
+Check progress:
 ```
 /macrohard-teams:status
 ```
 
-## How it works
+## Team
 
-The plugin is built on 22 principles distilled from 18 research sources across 8 iterations of research. Zero contradictions across all sources.
-
-### Team (4 agents, heterogeneous models)
-
-| Agent | Model | Writes to | Blocked from |
+| Agent | Model | Writes to | Enforced by |
 |-------|-------|-----------|-------------|
 | leader | Opus | orchestration only | never implements |
-| product-pm | Sonnet | docs/product/, docs/specs/ | src/, tests/ |
-| eng-lead | Opus | src/, package* | tests/, docs/product/ |
-| qa-tester | Sonnet | tests/, e2e/ | src/, docs/product/ |
+| product-pm | Sonnet | docs/product/, docs/specs/ | PreToolUse hook |
+| eng-lead | Opus | src/, package* | PreToolUse hook |
+| qa-tester | Sonnet | tests/, e2e/ | PreToolUse hook |
 
-Boundaries are **physically enforced** by PreToolUse hooks — agents can't cheat.
+Boundaries are **physically enforced** — agents that try to write outside their directories get blocked with exit code 2.
+
+## How it works
 
 ### Wave-based execution
 
-Tasks run in waves based on dependencies, not fixed stages:
-- **Independent tasks** (zero file overlap) → parallel, proven 1.75x speedup
-- **Dependent tasks** (B needs A's output) → sequential
+Tasks run in dependency-based waves, not fixed stages:
+- **Independent tasks** (zero file overlap) → parallel (proven 1.75x speedup)
+- **Dependent tasks** → sequential (PRD before implementation, implementation before tests)
 
-### What the hooks do
+### Hooks
 
-| Hook | What it enforces |
-|------|-----------------|
-| enforce-boundary.sh | Blocks agents from writing outside their directories |
-| enforce-commit.sh | Requires Conventional Commits format |
-| log-decision.sh | Logs every file change to decisions.jsonl |
-| teammate-gate.sh | Blocks agents from going idle without deliverables |
-| task-complete-gate.sh | Logs task completions |
-| inject-context.sh | Reminds agents of their boundaries on startup |
+| Hook | Event | Purpose |
+|------|-------|---------|
+| enforce-boundary.sh | PreToolUse (Write/Edit) | Blocks agents from writing outside their directories |
+| enforce-commit.sh | PreToolUse (Bash) | Requires Conventional Commits format |
+| log-decision.sh | PostToolUse (Write/Edit) | Logs every file change to decisions.jsonl |
+| teammate-gate.sh | TeammateIdle | Blocks agents from going idle without deliverables |
+| task-complete-gate.sh | TaskCompleted | Logs task completions |
+| inject-context.sh | SubagentStart | Reminds agents of their boundaries on startup |
+
+## Repository structure
+
+```
+macrohard-teams/
+├── .claude-plugin/
+│   └── marketplace.json              # Marketplace catalog
+├── plugins/
+│   └── macrohard-teams/
+│       ├── .claude-plugin/
+│       │   └── plugin.json           # Plugin manifest (v2.0.0)
+│       ├── agents/                   # 4 agent specs
+│       │   ├── leader.md
+│       │   ├── product-pm.md
+│       │   ├── eng-lead.md
+│       │   └── qa-tester.md
+│       ├── hooks/
+│       │   └── hooks.json            # 6 hook events
+│       ├── scripts/                  # 6 enforcement scripts
+│       └── skills/
+│           ├── build/SKILL.md        # /macrohard-teams:build
+│           └── status/SKILL.md       # /macrohard-teams:status
+└── README.md
+```
 
 ## Research basis
 
-Key sources behind the design:
+Design decisions are backed by 18 research sources across 8 iterations with zero contradictions:
 
 - **Anthropic Official Docs** — 3-5 teammates optimal, file locking prevents conflicts
-- **Google Research** — sequential tasks degrade -70% with more agents, 45% single-agent threshold
-- **Nicholas Carlini (Anthropic)** — tests are THE primary control mechanism, 16-agent C compiler at $20k
-- **Addy Osmani** — planner-worker-judge hierarchy, four channels of memory
+- **Google Research** — sequential tasks degrade -70% with more agents
+- **Nicholas Carlini (Anthropic)** — tests are the primary control mechanism
+- **Addy Osmani** — planner-worker-judge hierarchy
 - **Alex Lavaee** — Cursor + Anthropic converged on same 5 primitives independently
-
-Full research data: 18 sources, 8 first principles, 22 synthesized principles, 0 contradictions.
 
 ## License
 

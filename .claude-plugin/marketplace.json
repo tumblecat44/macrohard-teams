@@ -1,0 +1,24 @@
+{
+  "name": "macrohard-teams",
+  "owner": {
+    "name": "tumblecat44"
+  },
+  "metadata": {
+    "description": "4-agent build team for Claude Code. PM writes PRD, engineer implements, QA tests."
+  },
+  "plugins": [
+    {
+      "name": "macrohard-teams",
+      "source": "./plugins/macrohard-teams",
+      "description": "4-agent build team — tell it what to build, PM/engineer/QA do the rest. Boundaries enforced by hooks.",
+      "version": "2.0.0",
+      "author": {
+        "name": "tumblecat44"
+      },
+      "repository": "https://github.com/tumblecat44/macrohard-teams",
+      "license": "MIT",
+      "keywords": ["agent-teams", "build-pipeline", "context-boundary"],
+      "category": "development"
+    }
+  ]
+}
