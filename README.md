@@ -71,22 +71,19 @@ Tasks run in dependency-based waves, not fixed stages:
 ```
 macrohard-teams/
 ├── .claude-plugin/
-│   └── marketplace.json              # Marketplace catalog
-├── plugins/
-│   └── macrohard-teams/
-│       ├── .claude-plugin/
-│       │   └── plugin.json           # Plugin manifest (v2.0.0)
-│       ├── agents/                   # 4 agent specs
-│       │   ├── leader.md
-│       │   ├── product-pm.md
-│       │   ├── eng-lead.md
-│       │   └── qa-tester.md
-│       ├── hooks/
-│       │   └── hooks.json            # 6 hook events
-│       ├── scripts/                  # 6 enforcement scripts
-│       └── skills/
-│           ├── build/SKILL.md        # /macrohard-teams:build
-│           └── status/SKILL.md       # /macrohard-teams:status
+│   ├── marketplace.json    # Marketplace catalog (source: ".")
+│   └── plugin.json         # Plugin manifest (v2.0.0)
+├── agents/                 # 4 agent specs
+│   ├── leader.md
+│   ├── product-pm.md
+│   ├── eng-lead.md
+│   └── qa-tester.md
+├── hooks/
+│   └── hooks.json          # 6 hook events
+├── scripts/                # 6 enforcement scripts
+├── skills/
+│   ├── build/SKILL.md      # /macrohard-teams:build
+│   └── status/SKILL.md     # /macrohard-teams:status
 └── README.md
 ```
 
