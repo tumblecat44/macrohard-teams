@@ -1,0 +1,17 @@
+{
+  "name": "macrohard-teams",
+  "description": "Self-propagating agent teams with institutional memory, research-driven evolution, and convergence detection. Turns any project into an AI-only startup where agents research, design, build, test, and evolve their own team composition.",
+  "version": "1.0.0",
+  "author": {
+    "name": "tumblecat44"
+  },
+  "repository": "https://github.com/tumblecat44/macrohard-teams",
+  "license": "MIT",
+  "keywords": [
+    "agent-teams",
+    "self-propagation",
+    "institutional-memory",
+    "research-loop",
+    "convergence"
+  ]
+}
