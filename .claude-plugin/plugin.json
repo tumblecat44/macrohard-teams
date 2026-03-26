@@ -1,7 +1,7 @@
 {
   "name": "macrohard-teams",
   "description": "4-agent build team for Claude Code. Tell it what to build — PM writes the PRD, engineer implements, QA tests. Boundaries enforced by hooks, wave-based execution, research-backed design from 18 sources.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": {
     "name": "tumblecat44"
   },

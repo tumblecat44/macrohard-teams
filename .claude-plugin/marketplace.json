@@ -11,7 +11,7 @@
       "name": "macrohard-teams",
       "source": ".",
       "description": "4-agent build team — tell it what to build, PM/engineer/QA do the rest. Boundaries enforced by hooks.",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "author": {
         "name": "tumblecat44"
       },
