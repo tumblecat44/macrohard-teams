@@ -1,60 +1,41 @@
 ---
 name: status
-description: Show the current state of the self-propagating team — iteration count, convergence progress, research sources, first principles, and team composition. Use to check progress without running a loop iteration.
+description: Show current build progress — what the team has built, which agents produced what, test results, and any pending work. Use to check what was done.
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
-# MacroHard Team Status
+# Build Status
 
-Read and display the current state of the self-propagating team.
+Check what the team has produced so far.
 
 ## What to show
 
-1. **Read `.macrohard-memory/loop-state.json`** and display:
-   - Current iteration and phase
-   - Convergence counter (N/3)
-   - Experiments completed
-   - Parallel test status
+1. **PRDs written** — list files in docs/product/ and docs/specs/
+2. **Code implemented** — list files in src/ with line counts
+3. **Tests written** — list files in tests/ and e2e/ with pass/fail status
+4. **Recent commits** — `git log --oneline -10`
+5. **Uncommitted changes** — `git status --porcelain`
+6. **Decision log** — last 5 entries from decisions.jsonl if it exists
 
-2. **Read `.macrohard-memory/index.md`** and display:
-   - Total research sources
-   - Total first principles
-   - Total synthesized principles
-   - Total experiments and retrospectives
-
-3. **List current agents** from `.claude/agents/` or plugin agents:
-   - Name, model, role summary
-
-4. **Check for pending retro actions**:
-   ```bash
-   grep -r '\- \[ \]' .macrohard-memory/retrospectives/RETRO-*.md
-   ```
-
-5. **Check for uncommitted changes**:
-   ```bash
-   git status --porcelain
-   ```
-
-6. **Display promotion candidates** from synthesis.md that are close to First Principle promotion.
-
-## Output Format
+## Output format
 
 ```
-=== MacroHard Team Status ===
-Iteration: N | Phase: X (NAME) | Status: running/converged
-Convergence: N/3 | Experiments: N/2 | Parallel: yes/no
+=== Build Status ===
 
-Team: 4 agents
-  - leader (opus) — orchestrator
-  - product-pm (sonnet) — PRD/specs
-  - eng-lead (opus) — implementation
-  - qa-tester (sonnet) — tests
+PRDs: [count] documents in docs/product/
+  - [filename] ([lines] lines)
 
-Research: N sources | Principles: N first + N synthesized
-Pending retro items: N
-Uncommitted changes: N files
+Implementation: [count] files in src/
+  - [filename] ([lines] lines)
 
-Next: [recommended action]
+Tests: [count] files in tests/ + e2e/
+  - [filename] ([lines] lines)
+  - Last run: [pass/fail]
+
+Recent commits:
+  [git log output]
+
+Pending: [uncommitted files or "all committed"]
 ```
 
 $ARGUMENTS

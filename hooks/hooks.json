@@ -1,17 +1,6 @@
 {
-  "description": "MacroHard self-propagating agent teams: context boundary enforcement, commit validation, decision logging, and convergence gates",
+  "description": "MacroHard agent teams: context boundary enforcement, commit validation, decision logging, and teammate quality gates",
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh",
-            "statusMessage": "Loading institutional memory..."
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit",
@@ -41,16 +30,6 @@
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/scripts/log-decision.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/loop-gate.sh"
           }
         ]
       }
